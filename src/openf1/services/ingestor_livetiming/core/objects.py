@@ -59,6 +59,10 @@ class Document(ABC):
         return False
 
     def __lt__(self, other):
+        if self.unique_key.__len__() > 1 and (self.unique_key[1] is None):
+            return True
+        if self.unique_key.__len__() > 1 and (other.unique_key[1] is None):
+            return False
         return self.unique_key < other.unique_key
 
     def __hash__(self):

@@ -354,6 +354,9 @@ def ingest_session(year: int, meeting_key: int, session_key: int, verbose: bool 
     collections = get_collections(meeting_key=meeting_key, session_key=session_key)
     collection_names = sorted([c.__class__.name for c in collections])
 
+    # Delete car_data and location collections
+    collection_names = [c for c in collection_names if c not in ["car_data", "location"]]
+
     if verbose:
         logger.info(
             f"Ingesting {len(collection_names)} collections: {collection_names}"
@@ -378,7 +381,7 @@ def ingest_meeting(year: int, meeting_key: int, verbose: bool = True):
         if verbose:
             logger.info(f"Ingesting session {session_key}")
         ingest_session(
-            year=year, meeting_key=meeting_key, session_key=session_key, verbose=False
+            year=year, meeting_key=meeting_key, session_key=session_key, verbose=verbose
         )
 
 
@@ -391,7 +394,7 @@ def ingest_season(year: int, verbose: bool = True):
     for meeting_key in meeting_keys:
         if verbose:
             logger.info(f"Ingesting meeting {meeting_key}")
-        ingest_meeting(year=year, meeting_key=meeting_key, verbose=False)
+        ingest_meeting(year=year, meeting_key=meeting_key, verbose=verbose)
 
 
 if __name__ == "__main__":
